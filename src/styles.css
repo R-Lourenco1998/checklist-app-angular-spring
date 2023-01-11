@@ -1,1 +1,92 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-decoration: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.w-10p {
+  width: 15rem;
+}
+
+.ml-15 {
+  margin-left: 0.6rem;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.m-20 {
+  margin: 20px;
+}
+
+.mr-10 {
+  margin-right: 10px !important;
+}
+
+.flx-center-row {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flx-evly {
+  justify-content: space-evenly;
+}
+
+.w-300 {
+  width: 300px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.w-450 {
+  width: 450px;
+}
+
+.mt-20 {
+  margin-top: 10px;
+}
+
+.flx-center {
+  display: flex !important;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.w-450 {
+  width: 450px;
+}
+
+.flx-clmn {
+  display: flex;
+  flex-direction: column;
+}
+
+.flx-rw-ctnr {
+  display: flex !important;
+  flex-direction: row;
+}
+
+.flx-evly {
+  justify-content: space-evenly;
+}
