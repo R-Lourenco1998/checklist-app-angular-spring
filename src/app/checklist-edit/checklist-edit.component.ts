@@ -16,13 +16,13 @@ export class ChecklistEditComponent implements OnInit {
     private dialogRef: MatDialogRef<ChecklistEditComponent>,
     @Inject(MAT_DIALOG_DATA) dialogData: any
   ) {
-    if (dialogData.UpdatableinputChecklist != null) {
-      this.editableItem = dialogData.UpdatableinputChecklist;
+    if (dialogData.updatableChecklistItem != null) {
+      this.checklistItem = dialogData.updatableChecklistItem;
     }
     if (dialogData.actionName != null) {
       this.actionName = dialogData.actionName;
     }
-    
+
   }
 
   public onFormClose($event: any) {
@@ -33,12 +33,9 @@ export class ChecklistEditComponent implements OnInit {
 
   public closeModalWindow($event: any) {
     //TODO: handle action - save/cancel
-    if ($event) {
+    if ($event != null) {
       //save
-      this.dialogRef.close();
-    } else {
-      //cancel
-      this.dialogRef.close();
+      this.dialogRef.close($event);
     }
   }
 }

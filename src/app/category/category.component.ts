@@ -3,13 +3,8 @@ import { Category } from '../models/category';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { CategoryEditComponent } from '../category-edit/category-edit.component';
-
-export const CATEGORY_DATA = [
-  { name: 'Educação', guid: 'aaa-bbb-ccc-dddd' },
-  { name: 'Saúde', guid: 'aaa-bbb-ccc-dddd' },
-  { name: 'Trabalho', guid: 'aaa-bbb-ccc-dddd' },
-  { name: 'Outros', guid: 'aaa-bbb-ccc-dddd' },
-];
+import { CategoryService } from '../services/category.service';
+import { SnackBarService } from '../services/snack-bar.service';
 
 @Component({
   selector: 'app-category',
@@ -18,11 +13,20 @@ export const CATEGORY_DATA = [
 })
 export class CategoryComponent implements OnInit {
   public displayedColumns: string[] = ['id', 'name', 'actions'];
-  public dataSource: Category[] = CATEGORY_DATA;
+  public dataSource: Category[] = [];
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private categoryService: CategoryService,
+    private snackBarService: SnackBarService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.categoryService.getAllCategories().subscribe((res: Category[]) => {
+      this.dataSource = res;
+    });
+  }
+
   public createNewCategory(): void {
     this.dialog
       .open(CategoryEditComponent, {
@@ -32,7 +36,10 @@ export class CategoryComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          console.log('Categoria criada com sucesso'); //this.snackBarService.showSnackBar('Categoria criada com sucesso');
+          this.snackBarService.showSnackBar(
+            'Categoria criada com sucesso',
+            'OK'
+          ); //this.snackBarService.showSnackBar('Categoria criada com sucesso');
         } else {
           console.log('Categoria não criada'); //this.snackBarService.showSnackBar('Categoria não criada');
         }
@@ -48,7 +55,10 @@ export class CategoryComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          console.log('Categoria editada com sucesso'); //this.snackBarService.showSnackBar('Categoria editada com sucesso');
+          this.snackBarService.showSnackBar(
+            'Categoria editada com sucesso',
+            'OK'
+          ); //this.snackBarService.showSnackBar('Categoria editada com sucesso');
         } else {
           console.log('Categoria não editada'); //this.snackBarService.showSnackBar('Categoria não editada');
         }
@@ -68,7 +78,10 @@ export class CategoryComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          console.log('Categoria apagada com sucesso'); //this.snackBarService.showSnackBar('Categoria apagada com sucesso');
+          this.snackBarService.showSnackBar(
+            'Categoria apagada com sucesso',
+            'OK'
+          );
         } else {
           console.log('Categoria não apagada'); //this.snackBarService.showSnackBar('Categoria não apagada');
         }

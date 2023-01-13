@@ -27,8 +27,8 @@ export class CategoryEditComponent implements OnInit {
   ngOnInit(): void {}
 
   public closeModalWindow($event: any){
-    if($event){
-      this.dialogRef.close(true);
+    if($event != null){
+      this.dialogRef.close($event);
     }
   }
 }

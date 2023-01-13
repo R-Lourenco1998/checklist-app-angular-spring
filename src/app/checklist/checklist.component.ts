@@ -1,39 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CATEGORY_DATA } from '../category/category.component';
 import { ChecklistItem } from '../models/checklist_item';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ChecklistEditComponent } from '../checklist-edit/checklist-edit.component';
-
-export const CHECKLIST_DATA = [
-  {
-    name: 'Site Portfolio',
-    complete: true,
-    description: 'Criar um site para o portfolio de um desenvolvedor',
-    endDate: Date.now(),
-    startDate: Date.now(),
-    category: CATEGORY_DATA.find((x) => x.name == 'Educação'),
-    guid: 'aaa-bbb-ccc-dddd',
-  },
-  {
-    name: 'Clinico Geral',
-    complete: false,
-    description: 'Ir ao clinico geral',
-    endDate: Date.now(),
-    startDate: Date.now(),
-    category: CATEGORY_DATA.find((x) => x.name == 'Saúde'),
-    guid: 'aaa-bbb-ccc-dddd',
-  },
-  {
-    name: 'API do site Angular',
-    complete: false,
-    description: 'Criar a API springboot do site Angular',
-    endDate: Date.now(),
-    startDate: Date.now(),
-    category: CATEGORY_DATA.find((x) => x.name == 'Trabalho'),
-    guid: 'aaa-bbb-ccc-dddd',
-  },
-];
+import { ChecklistService } from '../services/checklist.service';
+import { Category } from '../models/category';
+import { SnackBarService } from '../services/snack-bar.service';
 
 @Component({
   selector: 'app-checklist',
@@ -41,7 +13,7 @@ export const CHECKLIST_DATA = [
   styleUrls: ['./checklist.component.css'],
 })
 export class ChecklistComponent implements OnInit {
-  public dataSource = CHECKLIST_DATA;
+  public dataSource!: Category[];
 
   public displayedColumns: string[] = [
     'id',
@@ -54,9 +26,17 @@ export class ChecklistComponent implements OnInit {
     'actions',
   ];
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private checklist: ChecklistService,
+    private snackBarService: SnackBarService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.checklist.getChecklist().subscribe((res: Category[]) => {
+      this.dataSource = res;
+    });
+  }
 
   createNewItem() {
     console.log('Criar novo item na checklist');
@@ -89,9 +69,9 @@ export class ChecklistComponent implements OnInit {
         },
       })
       .afterClosed()
-      .subscribe((resp) => {
-        if (resp) {
-          console.log('Tarefa apagada com sucesso');
+      .subscribe((res) => {
+        if (res) {
+          this.snackBarService.showSnackBar('Tarefa apagada com sucesso', 'OK');
         } else {
           console.log('Tarefa não apagada');
         }
@@ -100,21 +80,15 @@ export class ChecklistComponent implements OnInit {
 
   public updateChecklistItem(checklistItem: ChecklistItem) {
     this.dialog
-    .open(ChecklistEditComponent, {
-      disableClose: true,
-      data: {
-        dialogMsg: 'Você tem certeza que gostaria de apagar essa tarefa?',
-        leftButtonLabel: 'Cancelar',
-        rightButtonLabel: 'Apagar',
-      },
-    })
-    .afterClosed()
-    .subscribe((resp) => {
-      if (resp) {
-        console.log('Tarefa apagada com sucesso');
-      } else {
-        console.log('Tarefa não apagada');
-      }
-    });
+      .open(ChecklistEditComponent, {
+        disableClose: true,
+        data: { updatableChecklistItem: checklistItem, actionName: 'Editar' },
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.snackBarService.showSnackBar('Tarefa editada com sucesso', 'OK');
+        }
+      });
   }
 }
